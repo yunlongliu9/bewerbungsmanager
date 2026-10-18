@@ -200,3 +200,36 @@ planned
 - Time: not recorded.
 - Cost: unavailable.
 - Limitations: Contacts, interviews, notes, and dashboard APIs remain unimplemented. Real production authentication remains undecided.
+
+### Run: phase-3b-backend-mvp
+
+- Task: Complete the Bewerbungsmanager backend MVP.
+- Status: completed
+- Plan: Audit the authentication boundary, add unauthorized-access regression tests, implement Contacts, Interviews, Notes, and Dashboard modules, add database-backed integration tests, and update documentation.
+- Changes:
+  - Added Contacts, Interviews, Notes, and Dashboard modules and DTOs.
+  - Wired the new modules into `AppModule`.
+  - Added security regression tests for unauthenticated private endpoints.
+  - Added backend MVP integration tests for relationships, scheduling, cancellation, note-parent rules, and dashboard metrics.
+  - Updated `AGENTS.md`, `docs/architecture.md`, `docs/tasks/roadmap.md`, and this evaluation log.
+- Commands:
+  - `pnpm typecheck` -> passed.
+  - `pnpm lint` -> passed.
+  - `pnpm build` -> passed.
+  - `pnpm test` -> passed.
+  - `test:db` -> 32 tests passed.
+  - `prisma validate` -> passed.
+  - `pnpm format:check` -> passed after formatting three files.
+- Tests:
+  - Backend MVP API -> 7 tests passed.
+  - Company and Application API -> 8 tests passed.
+  - Prisma schema and transaction behavior -> 5 tests passed.
+  - Authentication boundary -> 12 tests passed.
+- Repairs:
+  - Attempt 1: formatted three Prettier-flagged files.
+- Human interventions:
+  - Approved Docker start, disposable database creation, migration, integration tests, database drop, and Docker stop.
+  - Approved the default test suite outside the sandbox for localhost binding.
+- Time: not recorded.
+- Cost: unavailable.
+- Limitations: The web MVP remains unimplemented. Production authentication and hosting remain undecided.

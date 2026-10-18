@@ -4,7 +4,7 @@ Status: Proposed
 
 Version: 0.1
 
-This document describes the architecture for Bewerbungsmanager. Phase 1 Monorepo Foundation, Phase 2 PostgreSQL plus Prisma Data Layer, and Phase 3A Company and Application API are implemented; the remaining API modules, deployment, real authentication, and backup automation remain proposed.
+This document describes the architecture for Bewerbungsmanager. Phase 1 Monorepo Foundation, Phase 2 PostgreSQL plus Prisma Data Layer, Phase 3A Company and Application API, and Phase 3B Backend MVP are implemented; the web MVP, deployment, real authentication, and backup automation remain proposed.
 
 ## Principles
 
@@ -77,7 +77,7 @@ The exact layout can be adjusted during scaffolding as long as the stated bounda
 - Returns typed API responses.
 - Treats every private API endpoint as owner-only in production.
 - Does not expose public registration or tenant management.
-- Implements guarded Company and Application modules with validation, pagination, search, filters, archive, and atomic status history.
+- Implements guarded Company, Application, Contact, Interview, Note, and Dashboard modules with validation, pagination, filters, archive, status history, and dashboard aggregation.
 
 ### packages/shared
 
