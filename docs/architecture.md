@@ -4,7 +4,7 @@ Status: Proposed
 
 Version: 0.1
 
-This document describes the architecture for Bewerbungsmanager. Phase 1 Monorepo Foundation, Phase 2 PostgreSQL plus Prisma Data Layer, Phase 3A Company and Application API, Phase 3B Backend MVP, Phase 3C Backend Audit plus API Contract Freeze, and Phase 4A Frontend Foundation plus Typed API Client are implemented; interactive web workflows, deployment, real authentication, and backup automation remain proposed.
+This document describes the architecture for Bewerbungsmanager. Phase 1 Monorepo Foundation, Phase 2 PostgreSQL plus Prisma Data Layer, Phase 3A Company and Application API, Phase 3B Backend MVP, Phase 3C Backend Audit plus API Contract Freeze, Phase 4A Frontend Foundation plus Typed API Client, and Phase 4B Secure Single-Owner Authentication are implemented; interactive web workflows, deployment, and backup automation remain proposed.
 
 ## Principles
 
@@ -123,6 +123,8 @@ The web app may use server-side rendering for initial data, but all mutations sh
 - Local development may use a local-only session or development bypass, provided that bypass is never enabled in production.
 
 The exact authentication library and hosting provider are undecided. Do not couple the domain model to either choice.
+
+The implemented authentication model uses one owner account, Argon2id password hashing, PostgreSQL-backed sessions, hashed session tokens, HttpOnly cookies, origin validation, and login rate limiting.
 
 ## Backup and Restore
 

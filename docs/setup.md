@@ -28,6 +28,25 @@ cp apps/api/.env.example apps/api/.env
 
 The local database uses the `trust` authentication method and is bound only to `127.0.0.1`. This is suitable for local development only. Production must use a real password and private networking.
 
+## Bootstrap the Owner
+
+Set a one-time bootstrap secret in `apps/api/.env`:
+
+```bash
+OWNER_BOOTSTRAP_SECRET=replace-with-a-long-random-value
+```
+
+Start the API, then create the only owner account:
+
+```bash
+curl -X POST http://localhost:3001/auth/bootstrap \
+  -H 'Content-Type: application/json' \
+  -H 'x-bootstrap-secret: replace-with-a-long-random-value' \
+  -d '{"email":"owner@example.com","password":"use-a-long-unique-password"}'
+```
+
+The endpoint works only once. Login returns an `HttpOnly`, `SameSite=Strict` session cookie; `Secure` is enabled when `NODE_ENV=production`.
+
 ## Start PostgreSQL
 
 ```bash

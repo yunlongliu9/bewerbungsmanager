@@ -4,7 +4,7 @@ Status: Proposed
 
 Version: 0.1
 
-This roadmap defines phased work for the MVP. Phase 0, Phase 1, Phase 2, Phase 3, Phase 3A, Phase 3B, Phase 3C, and Phase 4A are implemented. Phase 4 is complete for the backend MVP, and Phase 5 is partially implemented as the frontend foundation.
+This roadmap defines phased work for the MVP. Phase 0, Phase 1, Phase 2, Phase 3, Phase 3A, Phase 3B, Phase 3C, Phase 4A, and Phase 4B are implemented. Phase 4 is complete for the backend MVP, and Phase 5 is partially implemented as the frontend foundation.
 
 ## Phase 0: Engineering Harness
 
@@ -170,6 +170,40 @@ Verified Phase 3C results:
 - Internal server errors no longer leak implementation messages.
 - `docs/api-contract.md` was created from the implemented routes.
 - Database-backed tests increased from 32 to 38.
+
+## Phase 4B: Secure Single-Owner Authentication
+
+Status: Implemented and verified on 2026-10-18.
+
+Goal: establish a real single-owner identity and server-side session boundary.
+
+Scope:
+
+- Add Owner and Session Prisma models with a non-destructive migration.
+- Add one-time owner bootstrap.
+- Add login, session check, and logout endpoints.
+- Connect `OwnerAuthGuard` to PostgreSQL-backed sessions.
+- Store only SHA-256 session token hashes.
+- Hash passwords with Argon2id.
+- Enforce HttpOnly, Secure in production, and SameSite cookies.
+- Enforce same-origin CSRF validation on mutations.
+- Rate limit login attempts.
+
+Done when:
+
+- The bootstrap endpoint rejects a second owner.
+- Login failures return a generic error.
+- Authenticated reads succeed with the session cookie.
+- Mutations without a valid origin are rejected.
+- Logout revokes the server session.
+- Repeated login attempts are rate limited.
+- Authentication and regression tests pass.
+
+Verified results:
+
+- Authentication integration suite passed with 6 tests.
+- Full database-backed suite passed with 44 tests.
+- Owner and Session migration applied successfully.
 
 ## Phase 5: Web MVP
 

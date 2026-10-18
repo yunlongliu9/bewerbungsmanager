@@ -302,3 +302,44 @@ planned
 - Time: not recorded.
 - Cost: unavailable.
 - Limitations: The pages do not yet fetch or mutate live business data. Interactive workflows, real authentication, and deployment remain unimplemented.
+
+### Run: phase-4b-secure-single-owner-authentication
+
+- Task: Implement secure single-owner authentication.
+- Status: completed
+- Plan: Add Owner and Session models, one-time bootstrap, Argon2id password hashing, PostgreSQL-backed sessions, cookies, CSRF protection, login rate limiting, and integration tests.
+- Changes:
+  - Added `Owner` and `Session` Prisma models and migration.
+  - Added Argon2id password hashing and SHA-256 session token hashing.
+  - Added bootstrap, login, session check, and logout endpoints.
+  - Connected `OwnerAuthGuard` to real server sessions.
+  - Added same-origin CSRF origin checks.
+  - Added login rate limiting.
+  - Added authentication integration tests.
+  - Updated API contract, setup docs, roadmap, architecture, agent instructions, and evaluation records.
+- Commands:
+  - `pnpm add argon2` and `pnpm add -D @types/argon2` -> completed after allowing the Argon2 build script.
+  - `prisma format` -> passed.
+  - `prisma validate` -> passed.
+  - `prisma generate` -> passed with approved engine-cache access.
+  - `prisma migrate dev --create-only --name add_owner_and_session` -> created migration.
+  - `prisma migrate dev` -> applied migration.
+  - `pnpm typecheck` -> passed.
+  - `pnpm lint` -> passed.
+  - `pnpm build` -> passed.
+  - `pnpm test` -> passed.
+  - `test:db` -> 44 tests passed.
+  - `pnpm format:check` -> passed after formatting four files.
+- Tests:
+  - Authentication integration -> 6 tests passed.
+  - Full database-backed suite -> 44 tests passed.
+- Repairs:
+  - Attempt 1: allowed Argon2 native build scripts in `pnpm-workspace.yaml`.
+  - Attempt 2: formatted four Prettier-flagged files.
+- Human interventions:
+  - Approved dependency installation.
+  - Approved Docker start, migration, disposable database creation, integration tests, database drop, and Docker stop.
+  - Approved the default test suite outside the sandbox for localhost binding.
+- Time: not recorded.
+- Cost: unavailable.
+- Limitations: The login rate limiter is in-memory and is suitable only for a single API process. Deployment and backup automation remain unimplemented.

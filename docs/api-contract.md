@@ -12,6 +12,8 @@ This contract documents the implemented NestJS API.
 - JSON request and response bodies.
 - `GET /health` is public.
 - Every other endpoint requires an authenticated owner and uses `OwnerAuthGuard`.
+- Authenticated requests send `bewerbungsmanager_session` as an `HttpOnly` cookie.
+- Mutating authenticated requests must include an `Origin` header whose host matches the request host.
 - Unauthenticated private requests return:
 
 ```json
@@ -27,6 +29,62 @@ This contract documents the implemented NestJS API.
 - Validation errors return `400`.
 - Missing active records return `404`.
 - Conflicting domain states return `400`.
+- Login is rate limited per IP and returns `429` after repeated attempts.
+
+## Authentication
+
+### POST /auth/bootstrap
+
+Public one-time owner setup.
+
+Headers:
+
+- `x-bootstrap-secret`
+
+Body:
+
+```json
+{
+  "email": "owner@example.com",
+  "password": "long-secure-password"
+}
+```
+
+Returns the owner without a password hash. Rejects if an owner already exists.
+
+### POST /auth/login
+
+Body:
+
+```json
+{
+  "email": "owner@example.com",
+  "password": "long-secure-password"
+}
+```
+
+Sets the session cookie and returns:
+
+```json
+{
+  "owner": {
+    "id": "string",
+    "email": "owner@example.com",
+    "createdAt": "2026-10-18T00:00:00.000Z",
+    "updatedAt": "2026-10-18T00:00:00.000Z"
+  }
+}
+```
+
+Invalid credentials return the same generic `401` response.
+
+### GET /auth/session
+
+Requires a valid session cookie.
+
+### POST /auth/logout
+
+Requires a valid session cookie. Revokes the server session and clears the cookie.
 
 ## Error Shape
 

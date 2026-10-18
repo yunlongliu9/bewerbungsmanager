@@ -172,6 +172,7 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
 
     const response = await fetch(`${options.baseUrl}${path}`, {
       ...init,
+      credentials: 'include',
       headers,
     });
 
