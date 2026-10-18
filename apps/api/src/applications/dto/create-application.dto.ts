@@ -3,6 +3,7 @@ import {
   IsEnum,
   IsInt,
   IsISO8601,
+  IsNotEmpty,
   IsOptional,
   IsString,
   IsUrl,
@@ -16,6 +17,7 @@ import {
 
 export class CreateApplicationDto {
   @IsString()
+  @IsNotEmpty()
   companyId!: string;
 
   @IsString()

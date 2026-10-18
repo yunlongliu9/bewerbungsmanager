@@ -40,6 +40,7 @@ export class DashboardService {
         where: {
           deletedAt: null,
           scheduledAt: { gte: now },
+          application: { deletedAt: null },
         },
         include: {
           application: { include: { company: true } },

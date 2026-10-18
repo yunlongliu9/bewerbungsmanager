@@ -1,12 +1,22 @@
 import { InterviewFormat } from '@prisma/client';
-import { IsEnum, IsISO8601, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsEnum,
+  IsISO8601,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class CreateInterviewDto {
   @IsString()
+  @IsNotEmpty()
   applicationId!: string;
 
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
   contactId?: string;
 
   @IsOptional()

@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class QueryNotesDto {
   @IsOptional()
@@ -17,17 +17,21 @@ export class QueryNotesDto {
 
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
   companyId?: string;
 
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
   applicationId?: string;
 
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
   contactId?: string;
 
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
   interviewId?: string;
 }

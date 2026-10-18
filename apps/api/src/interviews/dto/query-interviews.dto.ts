@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsISO8601, IsOptional, IsString, Max, Min } from 'class-validator';
+import { IsInt, IsISO8601, IsNotEmpty, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class QueryInterviewsDto {
   @IsOptional()
@@ -17,10 +17,12 @@ export class QueryInterviewsDto {
 
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
   applicationId?: string;
 
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
   contactId?: string;
 
   @IsOptional()

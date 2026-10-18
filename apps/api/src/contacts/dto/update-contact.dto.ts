@@ -1,8 +1,9 @@
-import { IsEmail, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class UpdateContactDto {
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
   companyId?: string;
 
   @IsOptional()

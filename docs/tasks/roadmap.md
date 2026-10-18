@@ -4,7 +4,7 @@ Status: Proposed
 
 Version: 0.1
 
-This roadmap defines phased work for the MVP. Phase 0, Phase 1, Phase 2, Phase 3, Phase 3A, and Phase 3B are implemented. Phase 4 is complete for the backend MVP; the web MVP remains unimplemented.
+This roadmap defines phased work for the MVP. Phase 0, Phase 1, Phase 2, Phase 3, Phase 3A, Phase 3B, and Phase 3C are implemented. Phase 4 is complete for the backend MVP; the web MVP remains unimplemented.
 
 ## Phase 0: Engineering Harness
 
@@ -122,7 +122,7 @@ Verified results:
 
 ## Phase 4: API Foundation
 
-Status: Backend MVP implemented through Phase 3A and Phase 3B on 2026-10-18.
+Status: Backend MVP implemented and audited through Phase 3A, Phase 3B, and Phase 3C on 2026-10-18.
 
 Goal: expose typed domain operations through NestJS.
 
@@ -157,6 +157,19 @@ Verified Phase 3B results:
 - Dashboard returns active application counts, applications by status, upcoming interviews, recently updated applications, due follow-ups, and overdue follow-ups.
 - `OwnerAuthGuard` regression tests confirm private endpoints return `401 Unauthorized` without an owner session.
 - Database-backed API and security integration tests passed: 32 tests total.
+
+Verified Phase 3C results:
+
+- `OwnerAuthGuard` default-deny behavior and every private route were audited.
+- Status updates are no longer possible through the generic PATCH route.
+- Invalid company references return `404` instead of leaking database errors.
+- Salary currency and range rules return `400` validation errors.
+- Interview update enforces contact-company relationship invariants.
+- Archived applications no longer surface their interviews on the dashboard.
+- Status transitions are concurrency-safe with an atomic conditional update.
+- Internal server errors no longer leak implementation messages.
+- `docs/api-contract.md` was created from the implemented routes.
+- Database-backed tests increased from 32 to 38.
 
 ## Phase 5: Web MVP
 

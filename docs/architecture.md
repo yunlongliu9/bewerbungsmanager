@@ -4,7 +4,7 @@ Status: Proposed
 
 Version: 0.1
 
-This document describes the architecture for Bewerbungsmanager. Phase 1 Monorepo Foundation, Phase 2 PostgreSQL plus Prisma Data Layer, Phase 3A Company and Application API, and Phase 3B Backend MVP are implemented; the web MVP, deployment, real authentication, and backup automation remain proposed.
+This document describes the architecture for Bewerbungsmanager. Phase 1 Monorepo Foundation, Phase 2 PostgreSQL plus Prisma Data Layer, Phase 3A Company and Application API, Phase 3B Backend MVP, and Phase 3C Backend Audit plus API Contract Freeze are implemented; the web MVP, deployment, real authentication, and backup automation remain proposed.
 
 ## Principles
 
@@ -153,6 +153,8 @@ The Application model must support the fields defined in the product requirement
 Relationships and constraints are defined in the product requirements and are enforced in the initial migration.
 
 ## API Design
+
+The frozen backend contract is documented in `docs/api-contract.md`.
 
 The API should expose resource-oriented routes:
 

@@ -233,3 +233,42 @@ planned
 - Time: not recorded.
 - Cost: unavailable.
 - Limitations: The web MVP remains unimplemented. Production authentication and hosting remain undecided.
+
+### Run: phase-3c-backend-audit-contract-freeze
+
+- Task: Audit the backend and freeze the API contract.
+- Status: completed
+- Plan: Audit authentication, transactions, relationships, validation, pagination, errors, and concurrency; fix confirmed issues; document the implemented API contract; add regression tests.
+- Changes:
+  - Fixed status bypass through `PATCH /applications/:id`.
+  - Added company existence validation for applications.
+  - Added salary currency and range validation before database writes.
+  - Enforced contact-company relationship on interview updates.
+  - Excluded archived applications from interview lists and dashboard results.
+  - Made status transitions concurrency-safe with conditional updates.
+  - Hid internal exception messages from HTTP responses.
+  - Added non-empty ID validation across DTOs.
+  - Added `docs/api-contract.md`.
+  - Added audit regression tests.
+- Commands:
+  - `pnpm typecheck` -> passed.
+  - `pnpm lint` -> passed.
+  - `pnpm build` -> passed.
+  - `pnpm test` -> passed.
+  - `test:db` -> 38 tests passed.
+  - `prisma validate` -> passed.
+  - `pnpm format:check` -> passed after formatting five files.
+- Tests:
+  - Backend audit regressions -> 6 tests passed.
+  - Backend MVP API -> 7 tests passed.
+  - Company and Application API -> 8 tests passed.
+  - Prisma schema and transaction behavior -> 5 tests passed.
+  - Authentication boundary -> 12 tests passed.
+- Repairs:
+  - Attempt 1: formatted five Prettier-flagged files.
+- Human interventions:
+  - Approved Docker start, disposable database creation, migration, integration tests, database drop, and Docker stop.
+  - Approved the default test suite outside the sandbox for localhost binding.
+- Time: not recorded.
+- Cost: unavailable.
+- Limitations: The web MVP remains unimplemented. Production authentication and hosting remain undecided.

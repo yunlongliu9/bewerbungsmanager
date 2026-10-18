@@ -1,8 +1,9 @@
-import { ApplicationStatus, EmploymentType, Priority, WorkMode } from '@prisma/client';
+import { EmploymentType, Priority, WorkMode } from '@prisma/client';
 import {
   IsEnum,
   IsInt,
   IsISO8601,
+  IsNotEmpty,
   IsOptional,
   IsString,
   IsUrl,
@@ -17,6 +18,7 @@ import {
 export class UpdateApplicationDto {
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
   companyId?: string;
 
   @IsOptional()
@@ -29,10 +31,6 @@ export class UpdateApplicationDto {
   @IsUrl({ require_tld: false })
   @MaxLength(1000)
   jobPostingUrl?: string;
-
-  @IsOptional()
-  @IsEnum(ApplicationStatus)
-  status?: ApplicationStatus;
 
   @IsOptional()
   @IsISO8601()

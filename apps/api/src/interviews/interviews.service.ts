@@ -40,6 +40,7 @@ export class InterviewsService {
   async findAll(query: QueryInterviewsDto) {
     const where: Prisma.InterviewWhereInput = {
       deletedAt: null,
+      application: { deletedAt: null },
       ...(query.applicationId ? { applicationId: query.applicationId } : {}),
       ...(query.contactId ? { contactId: query.contactId } : {}),
       ...(query.from ? { scheduledAt: { gte: new Date(query.from) } } : {}),
@@ -73,7 +74,7 @@ export class InterviewsService {
 
   async findOne(id: string) {
     const interview = await this.prisma.interview.findFirst({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: null, application: { deletedAt: null } },
       include: {
         application: { include: { company: true } },
         contact: true,
@@ -88,19 +89,23 @@ export class InterviewsService {
   }
 
   async update(id: string, data: UpdateInterviewDto) {
-    await this.findOne(id);
+    const existing = await this.findOne(id);
+    const targetApplicationId = data.applicationId ?? existing.applicationId;
+    const targetContactId = data.contactId ?? existing.contactId ?? null;
 
-    if (data.applicationId) {
-      await this.ensureApplicationExists(data.applicationId);
-    }
+    const application = await this.ensureApplicationExists(targetApplicationId);
 
-    if (data.contactId) {
+    if (targetContactId) {
       const contact = await this.prisma.contact.findFirst({
-        where: { id: data.contactId, deletedAt: null },
+        where: { id: targetContactId, deletedAt: null },
       });
 
       if (!contact) {
         throw new NotFoundException('Contact not found');
+      }
+
+      if (contact.companyId !== application.companyId) {
+        throw new BadRequestException('Contact must belong to the application company');
       }
     }
 
@@ -108,7 +113,7 @@ export class InterviewsService {
       where: { id },
       data: {
         applicationId: data.applicationId,
-        contactId: data.contactId,
+        contactId: data.contactId ?? existing.contactId,
         interviewerName: data.interviewerName,
         format: data.format,
         scheduledAt: data.scheduledAt ? new Date(data.scheduledAt) : undefined,

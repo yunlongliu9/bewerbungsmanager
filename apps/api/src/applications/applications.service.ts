@@ -10,7 +10,9 @@ import { UpdateApplicationDto } from './dto/update-application.dto.js';
 export class ApplicationsService {
   constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
-  create(data: CreateApplicationDto) {
+  async create(data: CreateApplicationDto) {
+    await this.ensureCompanyExists(data.companyId);
+    this.validateSalaryRules(data);
     return this.prisma.application.create({
       data: this.toCreateInput(data),
     });
@@ -74,7 +76,18 @@ export class ApplicationsService {
   }
 
   async update(id: string, data: UpdateApplicationDto) {
-    await this.findOne(id);
+    const existing = await this.findOne(id);
+
+    if (data.companyId) {
+      await this.ensureCompanyExists(data.companyId);
+    }
+
+    this.validateSalaryRules({
+      salaryMin: data.salaryMin ?? existing.salaryMin ?? undefined,
+      salaryMax: data.salaryMax ?? existing.salaryMax ?? undefined,
+      salaryCurrency: data.salaryCurrency ?? existing.salaryCurrency ?? undefined,
+    });
+
     return this.prisma.application.update({
       where: { id },
       data: this.toUpdateInput(data),
@@ -107,10 +120,14 @@ export class ApplicationsService {
         throw new BadRequestException(`Application is already ${data.status}`);
       }
 
-      const updated = await tx.application.update({
-        where: { id },
+      const updated = await tx.application.updateMany({
+        where: { id, status: application.status, deletedAt: null },
         data: { status: data.status },
       });
+
+      if (updated.count !== 1) {
+        throw new BadRequestException('Application status changed concurrently');
+      }
 
       await tx.statusChange.create({
         data: {
@@ -121,7 +138,9 @@ export class ApplicationsService {
         },
       });
 
-      return updated;
+      return tx.application.findUniqueOrThrow({
+        where: { id },
+      });
     });
   }
 
@@ -150,7 +169,6 @@ export class ApplicationsService {
       company: data.companyId ? { connect: { id: data.companyId } } : undefined,
       jobTitle: data.jobTitle,
       jobPostingUrl: data.jobPostingUrl,
-      status: data.status,
       appliedAt: data.appliedAt ? new Date(data.appliedAt) : undefined,
       employmentType: data.employmentType,
       workMode: data.workMode,
@@ -163,5 +181,35 @@ export class ApplicationsService {
       jobDescriptionSnapshot: data.jobDescriptionSnapshot,
       source: data.source,
     };
+  }
+
+  private async ensureCompanyExists(companyId: string): Promise<void> {
+    const company = await this.prisma.company.findFirst({
+      where: { id: companyId, deletedAt: null },
+    });
+
+    if (!company) {
+      throw new NotFoundException('Company not found');
+    }
+  }
+
+  private validateSalaryRules(data: {
+    salaryMin?: number;
+    salaryMax?: number;
+    salaryCurrency?: string;
+  }): void {
+    const hasSalaryRange = data.salaryMin !== undefined || data.salaryMax !== undefined;
+
+    if (hasSalaryRange && !data.salaryCurrency) {
+      throw new BadRequestException('Salary currency is required when a salary range is provided');
+    }
+
+    if (
+      data.salaryMin !== undefined &&
+      data.salaryMax !== undefined &&
+      data.salaryMin > data.salaryMax
+    ) {
+      throw new BadRequestException('Salary minimum cannot exceed salary maximum');
+    }
   }
 }
