@@ -272,3 +272,33 @@ planned
 - Time: not recorded.
 - Cost: unavailable.
 - Limitations: The web MVP remains unimplemented. Production authentication and hosting remain undecided.
+
+### Run: phase-4a-frontend-foundation-typed-api-client
+
+- Task: Implement the frontend foundation and typed API client.
+- Status: completed
+- Plan: Add a responsive Next.js app shell, static feature routes, accessible state components, and a typed API client based on the frozen contract; add frontend tests.
+- Changes:
+  - Added a responsive app shell with desktop sidebar and mobile navigation.
+  - Added static Dashboard, Applications, Companies, Interviews, Contacts, and Notes routes.
+  - Added loading, empty, and error state components.
+  - Added typed API types, error handling, and client methods for all documented endpoints.
+  - Added frontend API client tests.
+  - Updated `AGENTS.md`, `docs/architecture.md`, `docs/tasks/roadmap.md`, and this evaluation log.
+- Commands:
+  - `pnpm typecheck` -> passed.
+  - `pnpm lint` -> passed.
+  - `pnpm --filter @bewerbungsmanager/web test` -> 8 tests passed.
+  - `pnpm build` -> passed.
+  - `pnpm test` -> web 8 tests and API health test passed.
+  - `pnpm format:check` -> passed after formatting three files.
+- Tests:
+  - `apps/web/src/lib/api/api-client.test.ts` -> 8 tests passed.
+- Repairs:
+  - Attempt 1: fixed a Vitest generic matcher type error.
+  - Attempt 2: formatted three Prettier-flagged files.
+- Human interventions:
+  - Approved the default test suite outside the sandbox for localhost binding.
+- Time: not recorded.
+- Cost: unavailable.
+- Limitations: The pages do not yet fetch or mutate live business data. Interactive workflows, real authentication, and deployment remain unimplemented.

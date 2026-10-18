@@ -2,9 +2,9 @@
 
 ## Repository Status
 
-Engineering Harness v0.1, Phase 1 Monorepo Foundation, Phase 2 PostgreSQL plus Prisma Data Layer, Phase 3A Company and Application API, Phase 3B Backend MVP, and Phase 3C Backend Audit plus API Contract Freeze are implemented. The backend includes guarded Company, Application, Contact, Interview, Note, and Dashboard modules.
+Engineering Harness v0.1, Phase 1 Monorepo Foundation, Phase 2 PostgreSQL plus Prisma Data Layer, Phase 3A Company and Application API, Phase 3B Backend MVP, Phase 3C Backend Audit plus API Contract Freeze, and Phase 4A Frontend Foundation plus Typed API Client are implemented.
 
-Frontend features, production deployment, real authentication, and backup automation remain proposed and unimplemented.
+Interactive frontend data workflows, production deployment, real authentication, and backup automation remain proposed and unimplemented.
 
 Treat the files under `docs/` as the current source of truth for intent and scope. In particular:
 
