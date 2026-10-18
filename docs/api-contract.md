@@ -52,6 +52,7 @@ Body:
 ```
 
 Required: `username`, `password`.
+`password` must be at least 6 characters.
 
 Returns the owner without a password hash. Rejects if an owner already exists.
 

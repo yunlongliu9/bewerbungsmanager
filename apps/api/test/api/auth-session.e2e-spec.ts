@@ -53,6 +53,25 @@ describe('Single-owner authentication', () => {
     await cleanDatabase();
   });
 
+  it('rejects a five-character bootstrap password', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/auth/bootstrap')
+      .set('x-bootstrap-secret', 'test-bootstrap-secret')
+      .send({ username: 'short-password', password: '12345' });
+
+    expect(response.status).toBe(400);
+  });
+
+  it('accepts a six-character bootstrap password', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/auth/bootstrap')
+      .set('x-bootstrap-secret', 'test-bootstrap-secret')
+      .send({ username: 'minimum-password', password: '123456' });
+
+    expect(response.status).toBe(201);
+    expect(response.body.username).toBe('minimum-password');
+  });
+
   it('bootstraps a single owner', async () => {
     const response = await request(app.getHttpServer())
       .post('/auth/bootstrap')

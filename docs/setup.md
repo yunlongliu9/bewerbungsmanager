@@ -36,7 +36,7 @@ Set a one-time bootstrap secret in `apps/api/.env`:
 OWNER_BOOTSTRAP_SECRET=replace-with-a-long-random-value
 ```
 
-Start the API, then create the only owner account with a username. The password is read from the terminal and is not shown:
+Start the API, then create the only owner account with a username. The password must be at least 6 characters and is read from the terminal without being shown:
 
 ```bash
 read -s -r -p "Owner password: " OWNER_PASSWORD
