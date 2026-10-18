@@ -1,0 +1,17 @@
+{
+  "name": "bewerbungsmanager",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@12.9.1",
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter @bewerbungsmanager/web --filter @bewerbungsmanager/api run dev",
+    "build": "pnpm -r --filter @bewerbungsmanager/web --filter @bewerbungsmanager/api run build",
+    "lint": "pnpm -r --filter @bewerbungsmanager/web --filter @bewerbungsmanager/api run lint",
+    "typecheck": "pnpm -r --filter @bewerbungsmanager/web --filter @bewerbungsmanager/api run typecheck",
+    "test": "pnpm -r --filter @bewerbungsmanager/web --filter @bewerbungsmanager/api run test",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.6.0"
+  }
+}
