@@ -162,3 +162,41 @@ planned
 - Time: not recorded.
 - Cost: unavailable.
 - Limitations: Docker and database commands require approved elevated access in the current sandbox. Production authentication and hosting remain undecided.
+
+### Run: phase-3a-company-application-api
+
+- Task: Implement Company and Application API.
+- Status: completed
+- Plan: Add NestJS Company and Application modules, CRUD plus archive, atomic status transitions, pagination, search, filters, DTO validation, consistent errors, a secure auth boundary, and integration tests.
+- Changes:
+  - Added `apps/api/src/companies` and `apps/api/src/applications`.
+  - Added auth guard and owner decorator boundary.
+  - Added validation helper and HTTP exception filter.
+  - Wired `PrismaModule`, `CompaniesModule`, and `ApplicationsModule` into `AppModule`.
+  - Added API integration tests and a shared database test helper.
+  - Added a transaction rollback test to the schema test suite.
+- Commands:
+  - `pnpm add class-validator class-transformer` -> completed.
+  - `pnpm add -D @types/express` -> completed.
+  - `pnpm typecheck` -> passed.
+  - `pnpm lint` -> passed.
+  - `pnpm build` -> passed.
+  - `pnpm format:check` -> passed after formatting three files.
+  - `pnpm test` -> passed for the health test.
+  - `test:db` -> 13 tests passed against a disposable database.
+  - `prisma validate` -> passed.
+- Tests:
+  - Company and Application API -> 8 tests passed.
+  - Prisma schema and transaction behavior -> 5 tests passed.
+  - Health endpoint -> 1 test passed.
+- Repairs:
+  - Attempt 1: added explicit `@Inject` decorators because Vitest/esbuild does not emit Nest constructor parameter metadata.
+  - Attempt 2: added per-route validation pipes with `expectedType` for the same metadata limitation.
+  - Attempt 3: scoped the default Vitest config to the health test so database-backed API tests do not run in the no-database default suite.
+- Human interventions:
+  - Approved dependency installation.
+  - Approved Docker start, disposable database creation, migration, integration tests, database drop, and Docker stop.
+  - Approved the default test suite outside the sandbox for localhost binding.
+- Time: not recorded.
+- Cost: unavailable.
+- Limitations: Contacts, interviews, notes, and dashboard APIs remain unimplemented. Real production authentication remains undecided.

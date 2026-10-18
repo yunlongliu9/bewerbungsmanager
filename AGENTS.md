@@ -2,9 +2,9 @@
 
 ## Repository Status
 
-Engineering Harness v0.1, Phase 1 Monorepo Foundation, and Phase 2 PostgreSQL plus Prisma Data Layer are implemented. The workspace contains real `apps/web` and `apps/api` applications, a local PostgreSQL Compose service, a Prisma schema, and an initial migration.
+Engineering Harness v0.1, Phase 1 Monorepo Foundation, Phase 2 PostgreSQL plus Prisma Data Layer, and Phase 3A Company and Application API are implemented. The workspace contains real `apps/web` and `apps/api` applications, a local PostgreSQL Compose service, a Prisma schema, an initial migration, and guarded Company and Application API modules.
 
-Domain APIs, frontend features, production deployment, authentication, and backup automation remain proposed and unimplemented.
+Contacts, interviews, notes, dashboard, frontend features, production deployment, real authentication, and backup automation remain proposed and unimplemented.
 
 Treat the files under `docs/` as the current source of truth for intent and scope. In particular:
 

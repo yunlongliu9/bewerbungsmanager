@@ -4,7 +4,7 @@ Status: Proposed
 
 Version: 0.1
 
-This roadmap defines phased work for the MVP. Phase 0, Phase 1, Phase 2, and Phase 3 are implemented. Phases after Phase 3 are proposed and not started.
+This roadmap defines phased work for the MVP. Phase 0, Phase 1, Phase 2, and Phase 3 are implemented. Phase 4 is partially implemented as Phase 3A, covering Company and Application APIs only.
 
 ## Phase 0: Engineering Harness
 
@@ -122,6 +122,8 @@ Verified results:
 
 ## Phase 4: API Foundation
 
+Status: Partially implemented as Phase 3A on 2026-10-18.
+
 Goal: expose typed domain operations through NestJS.
 
 Scope:
@@ -139,6 +141,15 @@ Done when:
 - Search and filter parameters are validated.
 - The API has no direct UI concerns.
 - API routes are structured as private owner-only endpoints, with no public registration or tenant management.
+
+Verified Phase 3A results:
+
+- Company and Application modules support create, list, get, update, archive, and atomic status transitions.
+- DTO validation, pagination, search, status filters, and company filters are implemented.
+- The API uses an `OwnerAuthGuard` boundary without a fake production authentication bypass.
+- Eight Company and Application API integration tests passed.
+- Five schema and transaction tests passed, including transaction rollback.
+- Contacts, interviews, notes, and dashboard endpoints remain unimplemented.
 
 ## Phase 5: Web MVP
 

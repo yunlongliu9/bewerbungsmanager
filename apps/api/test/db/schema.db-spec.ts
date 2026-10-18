@@ -163,4 +163,33 @@ describe('Prisma data layer', () => {
       }),
     ).rejects.toThrow();
   });
+
+  it('rolls back an application update when the transaction fails', async () => {
+    const company = await prisma.company.create({
+      data: { name: 'Rollback GmbH' },
+    });
+    const application = await prisma.application.create({
+      data: {
+        companyId: company.id,
+        jobTitle: 'QA Engineer',
+      },
+    });
+
+    await expect(
+      prisma.$transaction(async (tx) => {
+        await tx.application.update({
+          where: { id: application.id },
+          data: { status: ApplicationStatus.APPLIED },
+        });
+
+        throw new Error('forced rollback');
+      }),
+    ).rejects.toThrow('forced rollback');
+
+    const unchanged = await prisma.application.findUniqueOrThrow({
+      where: { id: application.id },
+    });
+
+    expect(unchanged.status).toBe(ApplicationStatus.WISHLIST);
+  });
 });
