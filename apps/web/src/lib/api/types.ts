@@ -132,3 +132,10 @@ export type ApiErrorBody = {
   path: string;
   timestamp: string;
 };
+
+export type AuthOwner = {
+  id: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+};

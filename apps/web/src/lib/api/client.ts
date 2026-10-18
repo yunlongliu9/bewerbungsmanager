@@ -3,6 +3,7 @@ import type {
   ApiErrorBody,
   Application,
   ApplicationStatus,
+  AuthOwner,
   Company,
   Contact,
   DashboardData,
@@ -72,6 +73,12 @@ type NoteInput = {
 };
 
 export type ApiClient = {
+  auth: {
+    bootstrap: (input: { email: string; password: string }, secret: string) => Promise<AuthOwner>;
+    login: (input: { email: string; password: string }) => Promise<{ owner: AuthOwner }>;
+    session: () => Promise<{ owner: AuthOwner }>;
+    logout: () => Promise<{ status: 'ok' }>;
+  };
   health: {
     get: () => Promise<{ status: 'ok' }>;
   };
@@ -203,6 +210,29 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
   }
 
   return {
+    auth: {
+      bootstrap: (input, secret) =>
+        request<AuthOwner>(
+          '/auth/bootstrap',
+          {
+            method: 'POST',
+            body: JSON.stringify(input),
+            headers: { 'x-bootstrap-secret': secret },
+          },
+          false,
+        ),
+      login: (input) =>
+        request<{ owner: AuthOwner }>(
+          '/auth/login',
+          {
+            method: 'POST',
+            body: JSON.stringify(input),
+          },
+          false,
+        ),
+      session: () => request<{ owner: AuthOwner }>('/auth/session'),
+      logout: () => request<{ status: 'ok' }>('/auth/logout', { method: 'POST' }),
+    },
     health: {
       get: () => request<{ status: 'ok' }>('/health', {}, false),
     },

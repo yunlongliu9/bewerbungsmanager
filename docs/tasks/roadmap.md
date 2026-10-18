@@ -4,7 +4,7 @@ Status: Proposed
 
 Version: 0.1
 
-This roadmap defines phased work for the MVP. Phase 0, Phase 1, Phase 2, Phase 3, Phase 3A, Phase 3B, Phase 3C, Phase 4A, and Phase 4B are implemented. Phase 4 is complete for the backend MVP, and Phase 5 is partially implemented as the frontend foundation.
+This roadmap defines phased work for the MVP. Phase 0, Phase 1, Phase 2, Phase 3, Phase 3A, Phase 3B, Phase 3C, Phase 4A, Phase 4B, and Phase 4C are implemented. Phase 4 is complete for the backend MVP, and Phase 5 is partially implemented with the dashboard and applications frontend.
 
 ## Phase 0: Engineering Harness
 
@@ -207,7 +207,7 @@ Verified results:
 
 ## Phase 5: Web MVP
 
-Status: Partially implemented as Phase 4A on 2026-10-18.
+Status: Partially implemented through Phase 4A and Phase 4C on 2026-10-18.
 
 Goal: build the usable tracker interface.
 
@@ -236,6 +236,15 @@ Verified Phase 4A results:
 - Future authentication token injection is supported without a fake production bypass.
 - Eight frontend API client tests passed.
 - Interactive data forms and live API-backed views remain unimplemented.
+
+Verified Phase 4C results:
+
+- Real login form and session-aware protected navigation.
+- Dashboard renders real status counts, upcoming interviews, recent applications, due follow-ups, and overdue follow-ups.
+- Applications page supports pagination, search, status/company filters, create, edit, and archive.
+- Application detail supports status transitions and history.
+- Loading, empty, and error states are used throughout.
+- Frontend API client and component tests pass; 10 web tests total.
 
 ## Phase 6: Quality and Hardening
 

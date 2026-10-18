@@ -1,13 +1,10 @@
-import { EmptyState, PageHeader } from '../../../components/page-state';
+import { ApplicationsView } from '../../../components/applications-view';
+import { AuthGuard } from '../../../components/auth-guard';
 
 export default function ApplicationsPage() {
   return (
-    <>
-      <PageHeader title="Applications" description="Track jobs, status, and next actions." />
-      <EmptyState
-        title="No applications"
-        description="Application records will appear here after the API client is connected."
-      />
-    </>
+    <AuthGuard>
+      <ApplicationsView />
+    </AuthGuard>
   );
 }

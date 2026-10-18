@@ -343,3 +343,40 @@ planned
 - Time: not recorded.
 - Cost: unavailable.
 - Limitations: The login rate limiter is in-memory and is suitable only for a single API process. Deployment and backup automation remain unimplemented.
+
+### Run: phase-4c-real-dashboard-applications-ui
+
+- Task: Implement the real Dashboard and Applications frontend.
+- Status: completed
+- Plan: Add login UI, protected navigation, real dashboard data, application list and detail workflows, automated UI tests, and documentation updates.
+- Changes:
+  - Added authentication context, login form, protected route guard, and account controls.
+  - Added real dashboard metrics and follow-up views.
+  - Added applications list with pagination, search, status/company filters, create, edit, and archive.
+  - Added application detail with status transitions and history.
+  - Added React Testing Library tests for login and application list rendering.
+  - Added a web Vitest config with automatic JSX runtime.
+  - Updated `AGENTS.md`, `docs/architecture.md`, `docs/tasks/roadmap.md`, and this evaluation log.
+- Commands:
+  - `pnpm typecheck` -> passed.
+  - `pnpm lint` -> passed.
+  - `pnpm --filter @bewerbungsmanager/web test` -> 10 tests passed.
+  - `pnpm build` -> passed.
+  - `pnpm test` -> passed.
+  - `pnpm format:check` -> passed after formatting six files.
+- Tests:
+  - API client -> 8 tests passed.
+  - Login form -> 1 test passed.
+  - Applications view -> 1 test passed.
+- Repairs:
+  - Attempt 1: fixed the missing `createApiClient` import in the client index.
+  - Attempt 2: made the application detail loader stable with `useCallback`.
+  - Attempt 3: added automatic JSX runtime for Vitest.
+  - Attempt 4: moved component test mocks into `vi.hoisted`.
+  - Attempt 5: formatted six Prettier-flagged files.
+- Human interventions:
+  - Approved React testing dependency installation.
+  - Approved the default test suite outside the sandbox for localhost binding.
+- Time: not recorded.
+- Cost: unavailable.
+- Limitations: Full browser-to-backend login was not run against a live deployment. Companies, contacts, interviews, and notes UI workflows remain unimplemented.

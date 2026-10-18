@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState, type ReactNode } from 'react';
+import { useAuth } from './auth-provider';
 
 const navigation = [
   { href: '/dashboard', label: 'Dashboard' },
@@ -16,6 +17,7 @@ const navigation = [
 export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { owner, logout } = useAuth();
 
   useEffect(() => {
     setMenuOpen(false);
@@ -37,6 +39,12 @@ export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
           <span className="sr-only">{menuOpen ? 'Close navigation' : 'Open navigation'}</span>
           <span aria-hidden="true">{menuOpen ? 'Close' : 'Menu'}</span>
         </button>
+        <div className="account">
+          <span className="account-email">{owner?.email}</span>
+          <button className="logout-button" type="button" onClick={() => void logout()}>
+            Sign out
+          </button>
+        </div>
       </header>
 
       <div className="app-body">
