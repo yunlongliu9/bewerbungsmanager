@@ -12,7 +12,7 @@ import { PrismaService } from '../prisma/prisma.service.js';
 
 export const SESSION_COOKIE = 'bewerbungsmanager_session';
 
-export type AuthOwner = Pick<Owner, 'id' | 'email' | 'createdAt' | 'updatedAt'>;
+export type AuthOwner = Pick<Owner, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>;
 export type AuthSession = Session & { owner: Owner };
 
 @Injectable()
@@ -20,7 +20,8 @@ export class AuthService {
   constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async bootstrapOwner(
-    email: string,
+    username: string,
+    email: string | undefined,
     password: string,
     bootstrapSecret: string,
   ): Promise<AuthOwner> {
@@ -41,20 +42,20 @@ export class AuthService {
 
     const passwordHash = await this.hashPassword(password);
     const owner = await this.prisma.owner.create({
-      data: { email, passwordHash },
+      data: { username, email, passwordHash },
     });
 
     return this.toAuthOwner(owner);
   }
 
   async login(
-    email: string,
+    username: string,
     password: string,
   ): Promise<{ owner: AuthOwner; sessionToken: string }> {
-    const owner = await this.prisma.owner.findUnique({ where: { email } });
+    const owner = await this.prisma.owner.findUnique({ where: { username } });
 
     if (!owner || !(await argon2.verify(owner.passwordHash, password))) {
-      throw new UnauthorizedException('Invalid email or password');
+      throw new UnauthorizedException('Invalid username or password');
     }
 
     const sessionToken = randomBytes(32).toString('base64url');
@@ -132,6 +133,7 @@ export class AuthService {
   private toAuthOwner(owner: Owner): AuthOwner {
     return {
       id: owner.id,
+      username: owner.username,
       email: owner.email,
       createdAt: owner.createdAt,
       updatedAt: owner.updatedAt,

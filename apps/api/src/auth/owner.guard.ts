@@ -61,7 +61,12 @@ export class OwnerAuthGuard implements CanActivate {
     }
 
     try {
-      if (new URL(origin).host !== request.headers.host) {
+      const originUrl = new URL(origin);
+      const requestHost = request.headers.host ?? '';
+      const originHost = originUrl.hostname;
+      const expectedHost = requestHost.split(':')[0];
+
+      if (originHost !== expectedHost) {
         throw new ForbiddenException('Invalid request origin');
       }
     } catch {

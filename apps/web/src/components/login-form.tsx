@@ -7,7 +7,7 @@ import { useAuth } from './auth-provider';
 export function LoginForm() {
   const router = useRouter();
   const { login } = useAuth();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -18,10 +18,10 @@ export function LoginForm() {
     setSubmitting(true);
 
     try {
-      await login(email, password);
+      await login(username, password);
       router.replace('/dashboard');
     } catch {
-      setError('Invalid email or password');
+      setError('Invalid username or password');
     } finally {
       setSubmitting(false);
     }
@@ -33,12 +33,12 @@ export function LoginForm() {
       <p className="login-intro">Access your private application tracker.</p>
 
       <label>
-        Email
+        Username
         <input
-          type="email"
-          autoComplete="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
+          type="text"
+          autoComplete="username"
+          value={username}
+          onChange={(event) => setUsername(event.target.value)}
           required
         />
       </label>

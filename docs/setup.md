@@ -36,16 +36,18 @@ Set a one-time bootstrap secret in `apps/api/.env`:
 OWNER_BOOTSTRAP_SECRET=replace-with-a-long-random-value
 ```
 
-Start the API, then create the only owner account:
+Start the API, then create the only owner account with a username. The password is read from the terminal and is not shown:
 
 ```bash
+read -s -r -p "Owner password: " OWNER_PASSWORD
+echo
 curl -X POST http://localhost:3001/auth/bootstrap \
   -H 'Content-Type: application/json' \
   -H 'x-bootstrap-secret: replace-with-a-long-random-value' \
-  -d '{"email":"owner@example.com","password":"use-a-long-unique-password"}'
+  -d "$(jq -nc --arg username viende --arg password "$OWNER_PASSWORD" '{username:$username,password:$password}')"
 ```
 
-The endpoint works only once. Login returns an `HttpOnly`, `SameSite=Strict` session cookie; `Secure` is enabled when `NODE_ENV=production`.
+The endpoint works only once and preserves any existing Owner. Login at `http://localhost:3000/login` using the same username and password.
 
 ## Start PostgreSQL
 

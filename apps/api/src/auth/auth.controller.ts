@@ -10,7 +10,8 @@ import { OwnerAuthGuard } from './owner.guard.js';
 type RequestWithOwner = Request & {
   owner?: {
     id: string;
-    email: string;
+    username: string;
+    email: string | null;
     createdAt: Date;
     updatedAt: Date;
   };
@@ -26,6 +27,7 @@ export class AuthController {
     @Headers('x-bootstrap-secret') bootstrapSecret: string | undefined,
   ) {
     return this.authService.bootstrapOwner(
+      bootstrapOwnerDto.username,
       bootstrapOwnerDto.email,
       bootstrapOwnerDto.password,
       bootstrapSecret ?? '',
@@ -38,7 +40,7 @@ export class AuthController {
     @Body(validationPipeFor(LoginDto)) loginDto: LoginDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const result = await this.authService.login(loginDto.email, loginDto.password);
+    const result = await this.authService.login(loginDto.username, loginDto.password);
 
     response.cookie(SESSION_COOKIE, result.sessionToken, {
       httpOnly: true,

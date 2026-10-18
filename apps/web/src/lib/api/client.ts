@@ -74,8 +74,11 @@ type NoteInput = {
 
 export type ApiClient = {
   auth: {
-    bootstrap: (input: { email: string; password: string }, secret: string) => Promise<AuthOwner>;
-    login: (input: { email: string; password: string }) => Promise<{ owner: AuthOwner }>;
+    bootstrap: (
+      input: { username: string; email?: string; password: string },
+      secret: string,
+    ) => Promise<AuthOwner>;
+    login: (input: { username: string; password: string }) => Promise<{ owner: AuthOwner }>;
     session: () => Promise<{ owner: AuthOwner }>;
     logout: () => Promise<{ status: 'ok' }>;
   };

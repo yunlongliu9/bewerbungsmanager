@@ -14,7 +14,7 @@ import { browserApiClient, type AuthOwner } from '../lib/api';
 type AuthContextValue = {
   owner: AuthOwner | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
 };
@@ -43,11 +43,11 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
   }, [refresh]);
 
   const login = useCallback(
-    async (email: string, password: string) => {
+    async (username: string, password: string) => {
       setLoading(true);
 
       try {
-        await browserApiClient.auth.login({ email, password });
+        await browserApiClient.auth.login({ username, password });
         await refresh();
       } finally {
         setLoading(false);

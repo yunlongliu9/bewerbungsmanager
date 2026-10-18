@@ -31,11 +31,11 @@ describe('LoginForm', () => {
     const user = userEvent.setup();
     render(<LoginForm />);
 
-    await user.type(screen.getByLabelText(/email/i), 'owner@example.com');
+    await user.type(screen.getByLabelText(/username/i), 'viende');
     await user.type(screen.getByLabelText(/password/i), 'correct-horse-battery-staple');
     await user.click(screen.getByRole('button', { name: /sign in/i }));
 
-    expect(login).toHaveBeenCalledWith('owner@example.com', 'correct-horse-battery-staple');
+    expect(login).toHaveBeenCalledWith('viende', 'correct-horse-battery-staple');
     expect(replace).toHaveBeenCalledWith('/dashboard');
   });
 });

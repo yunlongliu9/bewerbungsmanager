@@ -135,7 +135,8 @@ export type ApiErrorBody = {
 
 export type AuthOwner = {
   id: string;
-  email: string;
+  username: string;
+  email?: string | null;
   createdAt: string;
   updatedAt: string;
 };

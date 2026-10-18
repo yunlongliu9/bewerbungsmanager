@@ -6,7 +6,7 @@ import { AppModule } from '../../src/app.module.js';
 import { HttpExceptionFilter } from '../../src/common/http-exception.filter.js';
 import { cleanDatabase, prisma } from '../helpers/database.js';
 
-const OWNER_EMAIL = 'owner@example.com';
+const OWNER_USERNAME = 'viende';
 const OWNER_PASSWORD = 'correct-horse-battery-staple';
 
 function sessionCookie(response: Response): string {
@@ -57,18 +57,18 @@ describe('Single-owner authentication', () => {
     const response = await request(app.getHttpServer())
       .post('/auth/bootstrap')
       .set('x-bootstrap-secret', 'test-bootstrap-secret')
-      .send({ email: OWNER_EMAIL, password: OWNER_PASSWORD });
+      .send({ username: OWNER_USERNAME, password: OWNER_PASSWORD });
 
     expect(response.status).toBe(201);
     expect(response.body).toMatchObject({
-      email: OWNER_EMAIL,
+      username: OWNER_USERNAME,
     });
     expect(response.body.passwordHash).toBeUndefined();
 
     const duplicate = await request(app.getHttpServer())
       .post('/auth/bootstrap')
       .set('x-bootstrap-secret', 'test-bootstrap-secret')
-      .send({ email: 'second@example.com', password: OWNER_PASSWORD });
+      .send({ username: 'second-owner', password: OWNER_PASSWORD });
 
     expect(duplicate.status).toBe(409);
   });
@@ -77,25 +77,25 @@ describe('Single-owner authentication', () => {
     await request(app.getHttpServer())
       .post('/auth/bootstrap')
       .set('x-bootstrap-secret', 'test-bootstrap-secret')
-      .send({ email: OWNER_EMAIL, password: OWNER_PASSWORD });
+      .send({ username: OWNER_USERNAME, password: OWNER_PASSWORD });
 
     const response = await request(app.getHttpServer()).post('/auth/login').send({
-      email: OWNER_EMAIL,
+      username: OWNER_USERNAME,
       password: 'wrong-password',
     });
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe('Invalid email or password');
+    expect(response.body.message).toBe('Invalid username or password');
   });
 
   it('logs in and checks the session', async () => {
     await request(app.getHttpServer())
       .post('/auth/bootstrap')
       .set('x-bootstrap-secret', 'test-bootstrap-secret')
-      .send({ email: OWNER_EMAIL, password: OWNER_PASSWORD });
+      .send({ username: OWNER_USERNAME, password: OWNER_PASSWORD });
 
     const login = await request(app.getHttpServer()).post('/auth/login').send({
-      email: OWNER_EMAIL,
+      username: OWNER_USERNAME,
       password: OWNER_PASSWORD,
     });
 
@@ -107,17 +107,17 @@ describe('Single-owner authentication', () => {
     const session = await request(app.getHttpServer()).get('/auth/session').set('Cookie', cookie);
 
     expect(session.status).toBe(200);
-    expect(session.body.owner.email).toBe(OWNER_EMAIL);
+    expect(session.body.owner.username).toBe(OWNER_USERNAME);
   });
 
   it('allows authenticated reads and enforces CSRF on mutations', async () => {
     await request(app.getHttpServer())
       .post('/auth/bootstrap')
       .set('x-bootstrap-secret', 'test-bootstrap-secret')
-      .send({ email: OWNER_EMAIL, password: OWNER_PASSWORD });
+      .send({ username: OWNER_USERNAME, password: OWNER_PASSWORD });
 
     const login = await request(app.getHttpServer()).post('/auth/login').send({
-      email: OWNER_EMAIL,
+      username: OWNER_USERNAME,
       password: OWNER_PASSWORD,
     });
     const cookie = sessionCookie(login);
@@ -141,16 +141,25 @@ describe('Single-owner authentication', () => {
       .send({ name: 'Origin GmbH' });
 
     expect(validOrigin.status).toBe(201);
+
+    const proxiedOrigin = await request(app.getHttpServer())
+      .post('/companies')
+      .set('Cookie', cookie)
+      .set('Host', 'localhost:3000')
+      .set('Origin', 'http://localhost:3001')
+      .send({ name: 'Proxied Origin GmbH' });
+
+    expect(proxiedOrigin.status).toBe(201);
   });
 
   it('logs out and revokes the session', async () => {
     await request(app.getHttpServer())
       .post('/auth/bootstrap')
       .set('x-bootstrap-secret', 'test-bootstrap-secret')
-      .send({ email: OWNER_EMAIL, password: OWNER_PASSWORD });
+      .send({ username: OWNER_USERNAME, password: OWNER_PASSWORD });
 
     const login = await request(app.getHttpServer()).post('/auth/login').send({
-      email: OWNER_EMAIL,
+      username: OWNER_USERNAME,
       password: OWNER_PASSWORD,
     });
     const cookie = sessionCookie(login);
@@ -171,7 +180,7 @@ describe('Single-owner authentication', () => {
     await request(app.getHttpServer())
       .post('/auth/bootstrap')
       .set('x-bootstrap-secret', 'test-bootstrap-secret')
-      .send({ email: OWNER_EMAIL, password: OWNER_PASSWORD });
+      .send({ username: OWNER_USERNAME, password: OWNER_PASSWORD });
 
     let lastStatus = 0;
 
@@ -179,7 +188,7 @@ describe('Single-owner authentication', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/login')
         .set('X-Forwarded-For', '10.0.0.99')
-        .send({ email: OWNER_EMAIL, password: 'wrong-password' });
+        .send({ username: OWNER_USERNAME, password: 'wrong-password' });
       lastStatus = response.status;
     }
 

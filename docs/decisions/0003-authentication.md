@@ -12,13 +12,14 @@ Bewerbungsmanager is a personal cloud application with exactly one owner. The ba
 
 Use NestJS server-side sessions backed by PostgreSQL.
 
-- Store one `Owner` row with an Argon2id password hash.
+- Store one `Owner` row with a username, optional email, and Argon2id password hash.
 - Store random session tokens only as SHA-256 hashes in the `Session` table.
 - Send the raw session token in an `HttpOnly`, `Secure` in production, `SameSite=Strict` cookie.
 - Do not store JWTs in browser storage.
 - Protect mutating requests with same-origin `Origin` validation.
 - Rate limit login attempts per IP.
 - Bootstrap the owner with a one-time secret and reject bootstrap after an owner exists.
+- Log in with the owner username.
 - Return a generic login error for missing owners and wrong passwords.
 
 ## Threat Assumptions

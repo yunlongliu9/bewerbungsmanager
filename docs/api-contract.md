@@ -45,10 +45,13 @@ Body:
 
 ```json
 {
-  "email": "owner@example.com",
+  "username": "viende",
+  "email": "optional@example.com",
   "password": "long-secure-password"
 }
 ```
+
+Required: `username`, `password`.
 
 Returns the owner without a password hash. Rejects if an owner already exists.
 
@@ -58,7 +61,7 @@ Body:
 
 ```json
 {
-  "email": "owner@example.com",
+  "username": "viende",
   "password": "long-secure-password"
 }
 ```
@@ -69,7 +72,8 @@ Sets the session cookie and returns:
 {
   "owner": {
     "id": "string",
-    "email": "owner@example.com",
+    "username": "viende",
+    "email": null,
     "createdAt": "2026-10-18T00:00:00.000Z",
     "updatedAt": "2026-10-18T00:00:00.000Z"
   }
