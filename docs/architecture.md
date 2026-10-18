@@ -4,7 +4,7 @@ Status: Proposed
 
 Version: 0.1
 
-This document describes the architecture for Bewerbungsmanager. Phase 1 Monorepo Foundation is implemented; the database, domain, deployment, authentication, and backup sections remain proposed.
+This document describes the architecture for Bewerbungsmanager. Phase 1 Monorepo Foundation and Phase 2 PostgreSQL plus Prisma Data Layer are implemented; domain APIs, deployment, authentication, and backup automation remain proposed.
 
 ## Principles
 
@@ -33,7 +33,7 @@ This document describes the architecture for Bewerbungsmanager. Phase 1 Monorepo
 | Linting and formatting | ESLint and Prettier |
 | Testing | Vitest for unit tests, Supertest for API tests |
 
-pnpm 12.9.1 was verified and used for the workspace. Docker CLI is present, but daemon access was blocked during the environment check.
+pnpm 12.9.1 was verified and used for the workspace. Local PostgreSQL was verified with Docker Compose using approved elevated access on `127.0.0.1:5433`.
 
 ## Proposed Repository Layout
 
@@ -41,12 +41,13 @@ pnpm 12.9.1 was verified and used for the workspace. Docker CLI is present, but 
 bewerbungsmanager/
   apps/
     web/                 # Next.js frontend
-    api/                 # NestJS backend
+    api/
+      prisma/
+        schema.prisma    # Implemented database schema
+        migrations/      # Initial migration
+      src/               # NestJS backend source
   packages/
     shared/              # Shared domain types and validation schemas
-  prisma/
-    schema.prisma        # Proposed database schema
-    migrations/          # Generated migrations
   docker-compose.yml     # Local PostgreSQL, API, and web services
   docs/                  # Engineering documentation
     evals/
@@ -136,7 +137,7 @@ Requirements:
 
 ## Proposed Domain Model
 
-The Prisma schema is expected to include:
+The implemented Prisma schema includes:
 
 - Company
 - Application
@@ -148,7 +149,7 @@ The Prisma schema is expected to include:
 
 The Application model must support the fields defined in the product requirements, including employment type, work mode, deadline, next action timestamp, priority, salary currency, and job description snapshot.
 
-Relationships and constraints are defined in the product requirements and must be finalized during data-layer implementation.
+Relationships and constraints are defined in the product requirements and are enforced in the initial migration.
 
 ## API Design
 
@@ -186,7 +187,7 @@ Proposed services:
 - `api`: NestJS application.
 - `web`: Next.js application.
 
-Compose configuration is proposed only. It must not be created or executed as part of the documentation harness.
+The PostgreSQL Compose service is implemented for local development. It binds only to `127.0.0.1:5433` and uses the persistent `postgres-data` volume.
 
 The `postgres` service is a prerequisite for Prisma migrations. Migration or application steps must not be attempted until that service is confirmed reachable through an approved, non-security-bypassing path.
 

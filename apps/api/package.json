@@ -8,12 +8,18 @@
     "start": "node dist/main.js",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:db": "vitest run --config vitest.config.db.ts",
+    "prisma:generate": "prisma generate",
+    "prisma:validate": "prisma validate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
+    "@prisma/client": "^6.19.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2"
   },
@@ -25,6 +31,7 @@
     "@types/node": "^24.0.0",
     "@types/supertest": "^6.0.3",
     "eslint": "^9.0.0",
+    "prisma": "^6.19.3",
     "supertest": "^7.1.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.0.0",

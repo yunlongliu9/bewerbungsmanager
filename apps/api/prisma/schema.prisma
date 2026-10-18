@@ -1,0 +1,181 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ApplicationStatus {
+  WISHLIST
+  APPLIED
+  SCREENING
+  INTERVIEW
+  OFFER
+  REJECTED
+  WITHDRAWN
+  ACCEPTED
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  FREELANCE
+  OTHER
+}
+
+enum WorkMode {
+  ONSITE
+  HYBRID
+  REMOTE
+  UNSPECIFIED
+}
+
+enum Priority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum InterviewFormat {
+  PHONE
+  VIDEO
+  ONSITE
+  TECHNICAL
+  OTHER
+}
+
+model Company {
+  id          String    @id @default(cuid())
+  name        String    @db.VarChar(255)
+  website     String?   @db.VarChar(500)
+  location    String?   @db.VarChar(255)
+  description String?   @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  applications Application[]
+  contacts     Contact[]
+  notes        Note[]
+
+  @@index([name])
+  @@map("companies")
+}
+
+model Application {
+  id                     String            @id @default(cuid())
+  companyId              String            @map("company_id")
+  company                Company           @relation(fields: [companyId], references: [id], onDelete: Restrict)
+  jobTitle               String            @map("job_title") @db.VarChar(255)
+  jobPostingUrl          String?           @map("job_posting_url") @db.VarChar(1000)
+  status                 ApplicationStatus @default(WISHLIST)
+  appliedAt              DateTime          @default(now()) @map("applied_at")
+  employmentType         EmploymentType    @default(FULL_TIME) @map("employment_type")
+  workMode               WorkMode          @default(UNSPECIFIED) @map("work_mode")
+  deadline               DateTime?         @db.Date
+  nextActionAt           DateTime?         @map("next_action_at")
+  priority               Priority          @default(NORMAL)
+  salaryMin              Int?              @map("salary_min")
+  salaryMax              Int?              @map("salary_max")
+  salaryCurrency         String?           @map("salary_currency") @db.Char(3)
+  jobDescriptionSnapshot String?           @map("job_description_snapshot") @db.Text
+  source                 String?           @db.VarChar(255)
+  createdAt              DateTime          @default(now()) @map("created_at")
+  updatedAt              DateTime          @updatedAt @map("updated_at")
+  deletedAt              DateTime?         @map("deleted_at")
+
+  statusChanges StatusChange[]
+  interviews    Interview[]
+  notes         Note[]
+
+  @@index([companyId])
+  @@index([status])
+  @@index([workMode])
+  @@index([priority])
+  @@index([nextActionAt])
+  @@index([appliedAt])
+  @@map("applications")
+}
+
+model StatusChange {
+  id            String            @id @default(cuid())
+  applicationId String            @map("application_id")
+  application   Application       @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  fromStatus    ApplicationStatus @map("from_status")
+  toStatus      ApplicationStatus @map("to_status")
+  changedAt     DateTime          @default(now()) @map("changed_at")
+  note          String?           @db.Text
+
+  @@index([applicationId, changedAt])
+  @@index([toStatus])
+  @@map("status_changes")
+}
+
+model Contact {
+  id        String    @id @default(cuid())
+  companyId String    @map("company_id")
+  company   Company   @relation(fields: [companyId], references: [id], onDelete: Restrict)
+  name      String    @db.VarChar(255)
+  role      String?   @db.VarChar(255)
+  email     String?   @db.VarChar(255)
+  phone     String?   @db.VarChar(100)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  interviews Interview[]
+  notes      Note[]
+
+  @@index([companyId])
+  @@index([email])
+  @@map("contacts")
+}
+
+model Interview {
+  id              String          @id @default(cuid())
+  applicationId   String          @map("application_id")
+  application     Application     @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  contactId       String?         @map("contact_id")
+  contact         Contact?        @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  interviewerName String?         @map("interviewer_name") @db.VarChar(255)
+  format          InterviewFormat @default(OTHER)
+  scheduledAt     DateTime        @map("scheduled_at")
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+  deletedAt       DateTime?       @map("deleted_at")
+
+  notes Note[]
+
+  @@index([applicationId])
+  @@index([contactId])
+  @@index([scheduledAt])
+  @@map("interviews")
+}
+
+model Note {
+  id            String       @id @default(cuid())
+  companyId     String?      @map("company_id")
+  company       Company?     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  applicationId String?      @map("application_id")
+  application   Application? @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  contactId     String?      @map("contact_id")
+  contact       Contact?     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  interviewId   String?      @map("interview_id")
+  interview     Interview?   @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+  text          String       @db.Text
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+  deletedAt     DateTime?    @map("deleted_at")
+
+  @@index([companyId])
+  @@index([applicationId])
+  @@index([contactId])
+  @@index([interviewId])
+  @@index([createdAt])
+  @@map("notes")
+}

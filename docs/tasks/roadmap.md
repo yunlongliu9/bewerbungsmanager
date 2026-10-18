@@ -4,7 +4,7 @@ Status: Proposed
 
 Version: 0.1
 
-This roadmap defines phased work for the MVP. Phase 0 and Phase 1 are implemented. Phases after Phase 1 are proposed and not started.
+This roadmap defines phased work for the MVP. Phase 0, Phase 1, Phase 2, and Phase 3 are implemented. Phases after Phase 3 are proposed and not started.
 
 ## Phase 0: Engineering Harness
 
@@ -64,6 +64,8 @@ Verified results:
 
 ## Phase 2: Local PostgreSQL Environment
 
+Status: Implemented and verified on 2026-10-18.
+
 Goal: provision the local database before any migration work begins.
 
 Scope:
@@ -81,7 +83,16 @@ Done when:
 - Sandbox security is not disabled or bypassed.
 - No database credentials are committed.
 
+Verified results:
+
+- `docker compose up -d postgres` started `postgres:17-alpine` successfully.
+- PostgreSQL reported healthy on `127.0.0.1:5433`.
+- The persistent `postgres-data` volume was created and preserved.
+- The database was not exposed on a public host port.
+
 ## Phase 3: Data Layer
+
+Status: Implemented and verified on 2026-10-18.
 
 Goal: define and migrate the PostgreSQL schema after the database is available.
 
@@ -100,6 +111,14 @@ Done when:
 - The schema supports the product requirements.
 - Required fields and relationships are enforced.
 - No database credentials are committed.
+
+Verified results:
+
+- Prisma Client 6.19.3 was generated and Prisma schema validation passed.
+- The initial migration was created and applied to the local database.
+- The migration adds foreign keys, indexes, enum constraints, salary checks, and the note-parent check.
+- Four Prisma data-layer tests passed against a disposable `bewerbungsmanager_test` database.
+- The disposable test database was dropped after verification; the persistent volume was left intact.
 
 ## Phase 4: API Foundation
 

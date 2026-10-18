@@ -9,7 +9,13 @@
     "lint": "pnpm -r --filter @bewerbungsmanager/web --filter @bewerbungsmanager/api run lint",
     "typecheck": "pnpm -r --filter @bewerbungsmanager/web --filter @bewerbungsmanager/api run typecheck",
     "test": "pnpm -r --filter @bewerbungsmanager/web --filter @bewerbungsmanager/api run test",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose stop postgres",
+    "db:logs": "docker compose logs -f postgres",
+    "db:migrate": "pnpm --filter @bewerbungsmanager/api prisma:migrate",
+    "prisma:generate": "pnpm --filter @bewerbungsmanager/api prisma:generate",
+    "prisma:validate": "pnpm --filter @bewerbungsmanager/api prisma:validate"
   },
   "devDependencies": {
     "prettier": "^3.6.0"

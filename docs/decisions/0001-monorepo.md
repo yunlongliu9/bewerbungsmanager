@@ -29,7 +29,7 @@ Use a pnpm TypeScript monorepo with:
 - `docs/evals/task-runs.md` as the lightweight task outcome log.
 - The personal cloud access and security model recorded in ADR 0002.
 
-This is a proposal. No scaffolding has been created yet.
+The monorepo foundation and Prisma data layer are implemented. Production hosting and authentication remain undecided.
 
 ## Consequences
 

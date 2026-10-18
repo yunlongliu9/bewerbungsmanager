@@ -123,3 +123,42 @@ planned
 - Time: not recorded.
 - Cost: unavailable.
 - Limitations: Docker and PostgreSQL were not changed or tested. Next.js build emitted a non-blocking workspace-root warning.
+
+### Run: phase-2-postgres-prisma-data-layer
+
+- Task: Implement PostgreSQL and Prisma data layer.
+- Status: completed
+- Plan: Add local PostgreSQL Compose, Prisma integration, domain schema, initial migration, constraints, safe deletes, focused database tests, scripts, environment examples, and setup documentation.
+- Changes:
+  - Added `docker-compose.yml` with a localhost-only PostgreSQL service and persistent volume.
+  - Added Prisma Client and Prisma CLI to `apps/api`.
+  - Added `apps/api/prisma/schema.prisma`, initial migration, Prisma module, and Prisma service.
+  - Added database integration tests and a dedicated database test config.
+  - Added root and API database scripts plus environment examples.
+  - Added `docs/setup.md` and updated harness documents.
+- Commands:
+  - `pnpm add @prisma/client@6` -> completed after approving the Prisma client build script.
+  - `pnpm add -D prisma@6` -> completed after approving Prisma engine build scripts.
+  - `prisma format` -> passed.
+  - `prisma validate` -> passed with the documented local `DATABASE_URL`.
+  - `prisma generate` -> passed with approved engine-cache access.
+  - `docker compose up -d postgres` -> passed after switching from occupied port 5432 to localhost-only port 5433.
+  - `prisma migrate dev --create-only --name init` -> created the migration.
+  - `prisma migrate dev` -> applied the edited migration.
+  - `prisma migrate deploy` -> applied the migration to the disposable test database.
+  - `test:db` -> four database tests passed.
+  - `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build`, `pnpm format:check` -> passed.
+- Tests:
+  - `apps/api/test/db/schema.db-spec.ts` -> 4 tests passed.
+  - `apps/api/test/health.e2e-spec.ts` -> passed in the default test run.
+- Repairs:
+  - Attempt 1: switched PostgreSQL image from `18-alpine` to `17-alpine` because PostgreSQL 18 changed its data-directory layout.
+  - Attempt 2: moved the local port from 5432 to 5433 because an existing local PostgreSQL service already bound 5432.
+  - Attempt 3: added a dedicated Vitest database config because the default include pattern filtered out `.db-spec.ts`.
+- Human interventions:
+  - Approved registry access for Prisma package installation.
+  - Approved Docker Compose start, database creation, migration, test, and stop commands.
+  - Approved dropping the disposable `bewerbungsmanager_test` database.
+- Time: not recorded.
+- Cost: unavailable.
+- Limitations: Docker and database commands require approved elevated access in the current sandbox. Production authentication and hosting remain undecided.
