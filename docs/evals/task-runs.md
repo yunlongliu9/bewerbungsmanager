@@ -380,3 +380,31 @@ planned
 - Time: not recorded.
 - Cost: unavailable.
 - Limitations: Full browser-to-backend login was not run against a live deployment. Companies, contacts, interviews, and notes UI workflows remain unimplemented.
+
+### Run: companies-management-ui
+
+- Task: Implement Companies management end-to-end.
+- Status: completed
+- Plan: Replace the Companies placeholder with a typed-client-backed list, create, view, edit, delete, search, and pagination view; add focused frontend tests.
+- Changes:
+  - Added `apps/web/src/components/companies-view.tsx`.
+  - Wired the Companies route through `AuthGuard`.
+  - Added Companies component tests.
+  - Updated roadmap and architecture notes.
+- Commands:
+  - `pnpm typecheck` -> passed.
+  - `pnpm lint` -> passed.
+  - `pnpm --filter @bewerbungsmanager/web test` -> 12 tests passed.
+  - `pnpm build` -> passed.
+  - `pnpm test` -> passed.
+  - `pnpm format:check` -> passed.
+- Tests:
+  - Companies list and empty state -> 2 tests passed.
+  - Existing frontend suite -> 10 tests passed.
+- Repairs:
+  - None.
+- Human interventions:
+  - Approved the default test suite outside the sandbox for localhost binding.
+- Time: not recorded.
+- Cost: unavailable.
+- Limitations: No backend or Prisma migration changes were required. Contacts, interviews, and notes UI workflows remain unimplemented.

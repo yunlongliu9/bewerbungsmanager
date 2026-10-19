@@ -245,6 +245,7 @@ Verified Phase 4C results:
 - Application detail supports status transitions and history.
 - Loading, empty, and error states are used throughout.
 - Frontend API client and component tests pass; 10 web tests total.
+- Companies list, create, view, edit, delete, search, and pagination are implemented.
 
 ## Phase 6: Quality and Hardening
 

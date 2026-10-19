@@ -4,7 +4,7 @@
 
 Engineering Harness v0.1, Phase 1 Monorepo Foundation, Phase 2 PostgreSQL plus Prisma Data Layer, Phase 3A Company and Application API, Phase 3B Backend MVP, Phase 3C Backend Audit plus API Contract Freeze, Phase 4A Frontend Foundation plus Typed API Client, Phase 4B Secure Single-Owner Authentication, and Phase 4C Real Dashboard plus Applications UI are implemented.
 
-Companies, contacts, interviews, and notes frontend workflows, production deployment, and backup automation remain proposed and unimplemented.
+Contacts, interviews, and notes frontend workflows, production deployment, and backup automation remain proposed and unimplemented.
 
 Treat the files under `docs/` as the current source of truth for intent and scope. In particular:
 

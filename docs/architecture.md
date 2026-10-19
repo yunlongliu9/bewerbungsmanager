@@ -70,6 +70,7 @@ The exact layout can be adjusted during scaffolding as long as the stated bounda
 - Owns navigation, forms, filters, and dashboard presentation.
 - Implements a responsive application shell, static feature routes, accessible state components, and a typed client matching `docs/api-contract.md`.
 - Implements real login, protected navigation, dashboard metrics, and application list/create/edit/archive/detail workflows against the typed client.
+- Implements real Companies list/create/view/edit/delete workflows against the typed client.
 
 ### apps/api
 

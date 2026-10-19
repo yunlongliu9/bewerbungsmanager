@@ -1,13 +1,10 @@
-import { EmptyState, PageHeader } from '../../../components/page-state';
+import { AuthGuard } from '../../../components/auth-guard';
+import { CompaniesView } from '../../../components/companies-view';
 
 export default function CompaniesPage() {
   return (
-    <>
-      <PageHeader title="Companies" description="Manage employers and their details." />
-      <EmptyState
-        title="No companies"
-        description="Company records will appear here after the API client is connected."
-      />
-    </>
+    <AuthGuard>
+      <CompaniesView />
+    </AuthGuard>
   );
 }
